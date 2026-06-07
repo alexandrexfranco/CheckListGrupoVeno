@@ -18,7 +18,8 @@ import {
   HelpCircle, 
   BookOpen, 
   Clipboard,
-  History
+  History,
+  Download
 } from 'lucide-react';
 
 type Step = 'IDENTIFICACAO' | 'CHECKLIST' | 'SUMMARY';
@@ -29,6 +30,36 @@ export default function App() {
   const [vehicleType, setVehicleType] = useState<VehicleType>('Manual');
   const [checklist, setChecklist] = useState<ChecklistState>({});
   const [sessions, setSessions] = useState<EvaluationSession[]>([]);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isInstallable, setIsInstallable] = useState(false);
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setIsInstallable(true);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    window.addEventListener('appinstalled', () => {
+      setIsInstallable(false);
+      setDeferredPrompt(null);
+    });
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+  }, []);
+
+  const handleInstallApp = async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log(`User prompt outcome: ${outcome}`);
+    setDeferredPrompt(null);
+    setIsInstallable(false);
+  };
 
   // Load history from localStorage on startup
   useEffect(() => {
@@ -162,6 +193,15 @@ export default function App() {
               <span className="text-[10px] text-slate-400 font-bold block mt-0.5 tracking-wider">AVALIAÇÃO PRÁTICA DE MOTORISTAS</span>
             </div>
           </div>
+          {isInstallable && (
+            <button 
+              onClick={handleInstallApp}
+              className="flex items-center space-x-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black px-3.5 py-1.5 rounded-xl shadow-md transition-all border border-emerald-500/20 cursor-pointer active:scale-95 duration-150"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>Instalar App</span>
+            </button>
+          )}
         </div>
       </header>
 
