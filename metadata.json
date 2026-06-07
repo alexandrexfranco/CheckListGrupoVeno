@@ -1,0 +1,6 @@
+{
+  "name": "Avaliação de Motoristas",
+  "description": "Aplicativo mobile-first para avaliação prática de motoristas profissionais em testes de direção com geração de relatórios e cálculo automático de resultados.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
