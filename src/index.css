@@ -22,3 +22,157 @@
   }
 }
 
+/* Dark Mode Override Styles */
+.dark {
+  color-scheme: dark;
+}
+
+.dark body,
+.dark #driver-app-container {
+  background-color: #0b0f19 !important; /* Very sleek deep dark */
+  color: #f1f5f9 !important;
+}
+
+.dark header#app-nav-header {
+  background-color: #0b0f19 !important;
+  border-color: #1e293b !important;
+}
+
+/* Card overrides */
+.dark .bg-white {
+  background-color: #161e2e !important; /* Sleek card background */
+  border-color: #243048 !important;
+}
+
+/* Stepper override */
+.dark #flow-stepper {
+  background-color: #161e2e !important;
+  border-color: #243048 !important;
+}
+
+.dark #flow-stepper .bg-slate-100 {
+  background-color: #1f2a3f !important;
+}
+
+/* Text overrides */
+.dark .text-slate-800,
+.dark .text-slate-705 {
+  color: #f1f5f9 !important;
+}
+
+.dark .text-slate-705 {
+  color: #cbd5e1 !important;
+}
+
+.dark .text-slate-700 {
+  color: #cbd5e1 !important;
+}
+
+.dark .text-slate-650 {
+  color: #cbd5e1 !important;
+}
+
+.dark .text-slate-600 {
+  color: #cbd5e1 !important;
+}
+
+.dark .text-slate-500 {
+  color: #94a3b8 !important;
+}
+
+.dark .text-slate-400 {
+  color: #64748b !important;
+}
+
+/* Border overrides */
+.dark .border-slate-100,
+.dark .border-slate-105 {
+  border-color: #243048 !important;
+}
+
+.dark .border-slate-200 {
+  border-color: #2e3d5a !important;
+}
+
+.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) {
+  border-color: #243048 !important;
+}
+
+/* Input / Select overrides */
+.dark input,
+.dark select,
+.dark textarea {
+  background-color: #0f172a !important;
+  color: #f1f5f9 !important;
+  border-color: #2e3d5a !important;
+}
+
+.dark input:focus,
+.dark select:focus,
+.dark textarea:focus {
+  border-color: #3b82f6 !important;
+  background-color: #0f172a !important;
+}
+
+/* Buttons and Lists overrides */
+.dark .bg-slate-50 {
+  background-color: #1f2a3f !important;
+}
+
+.dark .bg-slate-50\/50 {
+  background-color: #0b0f19 !important;
+}
+
+.dark .bg-slate-100 {
+  background-color: #1f2a3f !important;
+  color: #cbd5e1 !important;
+}
+
+.dark .hover\:bg-slate-50:hover {
+  background-color: #1f2a3f !important;
+}
+
+.dark .hover\:bg-slate-100:hover {
+  background-color: #2e3d5a !important;
+}
+
+.dark .hover\:bg-slate-200:hover {
+  background-color: #2e3d5a !important;
+}
+
+/* History list override */
+.dark #history-list-root .bg-white {
+  background-color: #161e2e !important;
+}
+
+.dark #history-list-root .bg-white:hover {
+  border-color: #3b82f6 !important;
+}
+
+/* Checklist specific overrides */
+.dark .bg-slate-50\/70 {
+  background-color: #1f2a3f !important;
+}
+
+.dark .bg-amber-150 {
+  background-color: #b4530930 !important;
+  color: #fef3c7 !important;
+}
+
+.dark .bg-blue-50 {
+  background-color: #1d4ed820 !important;
+  color: #93c5fd !important;
+}
+
+.dark .text-blue-800 {
+  color: #93c5fd !important;
+}
+
+.dark .text-blue-750 {
+  color: #cbd5e1 !important;
+}
+
+.dark .text-blue-600 {
+  color: #3b82f6 !important;
+}
+

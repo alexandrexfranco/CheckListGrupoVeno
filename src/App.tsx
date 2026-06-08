@@ -19,7 +19,9 @@ import {
   BookOpen, 
   Clipboard,
   History,
-  Download
+  Download,
+  Sun,
+  Moon
 } from 'lucide-react';
 
 type Step = 'IDENTIFICACAO' | 'CHECKLIST' | 'SUMMARY';
@@ -32,6 +34,28 @@ export default function App() {
   const [sessions, setSessions] = useState<EvaluationSession[]>([]);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isInstallable, setIsInstallable] = useState(false);
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    const saved = localStorage.getItem('driver_evaluations_theme');
+    if (saved === 'dark' || saved === 'light') return saved;
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
+    }
+    return 'light';
+  });
+
+  useEffect(() => {
+    const root = window.document.documentElement;
+    if (theme === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+    localStorage.setItem('driver_evaluations_theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  };
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e: Event) => {
@@ -172,7 +196,7 @@ export default function App() {
       startTime: today.toTimeString().slice(0, 5),
       endTime: ''
     });
-    setVehicleType(session.vehicleType);
+    setVehicleType('Elétrico');
     setChecklist({});
     setStep('IDENTIFICACAO');
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -184,7 +208,14 @@ export default function App() {
       {/* CORPORATE NAV BAR */}
       <header className="bg-slate-900 text-white shadow-md border-b border-slate-800 sticky top-0 z-40" id="app-nav-header">
         <div className="max-w-4xl mx-auto px-4 py-3 pb-3.5 flex items-center justify-between">
-          <div className="flex items-center space-x-2.5">
+          <div 
+            onClick={() => {
+              setStep('IDENTIFICACAO');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className="flex items-center space-x-2.5 cursor-pointer hover:opacity-90 active:scale-[0.98] transition-all select-none"
+            title="Voltar para a Tela Inicial"
+          >
             <div className="p-1 bg-white rounded-xl shadow-inner flex items-center justify-center w-9 h-9">
               <img src="/icon.png" alt="Logo Grupo Veno" className="w-7 h-7 object-contain" />
             </div>
@@ -193,15 +224,26 @@ export default function App() {
               <span className="text-[10px] text-slate-400 font-bold block mt-0.5 tracking-wider">AVALIAÇÃO PRÁTICA DE MOTORISTAS</span>
             </div>
           </div>
-          {isInstallable && (
-            <button 
-              onClick={handleInstallApp}
-              className="flex items-center space-x-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black px-3.5 py-1.5 rounded-xl shadow-md transition-all border border-emerald-500/20 cursor-pointer active:scale-95 duration-150"
+          <div className="flex items-center space-x-2">
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="p-2 bg-slate-805 bg-slate-800 hover:bg-slate-705 hover:bg-slate-700 text-slate-200 hover:text-white rounded-xl transition-all cursor-pointer border border-slate-700/50 active:scale-95 duration-150 flex items-center justify-center"
+              title={theme === 'light' ? 'Ativar Tema Escuro' : 'Ativar Tema Claro'}
             >
-              <Download className="w-3.5 h-3.5" />
-              <span>Instalar App</span>
+              {theme === 'light' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
             </button>
-          )}
+
+            {isInstallable && (
+              <button 
+                onClick={handleInstallApp}
+                className="flex items-center space-x-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black px-3.5 py-1.5 rounded-xl shadow-md transition-all border border-emerald-500/20 cursor-pointer active:scale-95 duration-150"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Instalar App</span>
+              </button>
+            )}
+          </div>
         </div>
       </header>
 
@@ -282,11 +324,13 @@ export default function App() {
                   </p>
                 </div>
 
-                <CandidateForm 
-                  onComplete={handleCandidateFormComplete}
-                  initialInfo={candidateInfo || undefined}
-                  initialVehicleType={vehicleType}
-                />
+                <div key={candidateInfo ? `${candidateInfo.name}-${candidateInfo.date}-${candidateInfo.startTime}` : 'new'}>
+                  <CandidateForm 
+                    onComplete={handleCandidateFormComplete}
+                    initialInfo={candidateInfo || undefined}
+                    initialVehicleType={vehicleType}
+                  />
+                </div>
               </div>
 
               {/* Sidebar: Offline device evaluations history logs */}
@@ -363,11 +407,12 @@ export default function App() {
               exit={{ opacity: 0, x: 10 }}
             >
               <EvaluationSummary 
-                candidateInfo={candidateInfo!}
+                candidateInfo={candidateInfo}
                 vehicleType={vehicleType}
                 checklist={checklist}
                 onRestart={handleRestart}
                 onSaveSession={handleSaveSession}
+                onBackToHome={handleBackToForm}
               />
             </motion.div>
           )}

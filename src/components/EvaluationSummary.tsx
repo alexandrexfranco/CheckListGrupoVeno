@@ -23,12 +23,13 @@ import {
 } from 'lucide-react';
 
 interface EvaluationSummaryProps {
-  candidateInfo: CandidateInfo;
+  candidateInfo: CandidateInfo | null;
   vehicleType: VehicleType;
   checklist: ChecklistState;
   onRestart: () => void;
   // This helps bubble up that a report was successfully committed so the list updates
   onSaveSession: (instructorNotes: string) => void;
+  onBackToHome?: () => void;
 }
 
 export default function EvaluationSummary({
@@ -36,12 +37,15 @@ export default function EvaluationSummary({
   vehicleType,
   checklist,
   onRestart,
-  onSaveSession
+  onSaveSession,
+  onBackToHome
 }: EvaluationSummaryProps) {
   const [instructorNotes, setInstructorNotes] = useState('');
   const [errorNotes, setErrorNotes] = useState('');
   const [isPdfGenerating, setIsPdfGenerating] = useState(false);
   const [savedToHistory, setSavedToHistory] = useState(false);
+
+  if (!candidateInfo) return null;
 
   const results = calculateEvaluation(checklist);
 
@@ -309,7 +313,19 @@ export default function EvaluationSummary({
           </div>
         )}
 
-        {/* ACTION 2: COMPASS RESET NEW ASSESSMENT */}
+        {/* ACTION 2: VOLTAR AO INÍCIO */}
+        {onBackToHome && (
+          <button
+            id="btn-back-to-home"
+            type="button"
+            className="w-full bg-blue-600 hover:bg-blue-750 hover:bg-blue-700 text-white font-semibold py-3.5 px-6 rounded-xl transition-all cursor-pointer text-sm flex items-center justify-center space-x-2 shadow-md active:scale-[0.98]"
+            onClick={onBackToHome}
+          >
+            <span>Voltar para a Tela Inicial</span>
+          </button>
+        )}
+
+        {/* ACTION 3: COMPASS RESET NEW ASSESSMENT */}
         <button
           id="btn-new-evaluation"
           type="button"
